@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: user-db-migrate
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: khlyazzat/user-service-migrate:latest
+          command:
+            - sh
+            - -c
+            - |
+              migrate -path=/migrations \
+              -database="postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?sslmode=${DB_SSL_MODE}" \
+              up
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-db-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: user-db-config
+                  key: DB_NAME
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: user-db-config
+                  key: DB_HOST
+            - name: DB_SSL_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: user-db-config
+                  key: DB_SSL_MODE

@@ -1,0 +1,4 @@
+auth:
+  username: user_service
+  password: CHANGEME
+  database: userservice
