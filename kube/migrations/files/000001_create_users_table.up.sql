@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-  id      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id      BIGSERIAL PRIMARY KEY,
   name    TEXT NOT NULL,
   email   TEXT UNIQUE NOT NULL,
   age     INT
