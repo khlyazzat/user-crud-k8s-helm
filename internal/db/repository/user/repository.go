@@ -12,14 +12,13 @@ import (
 
 	db "github.com/khlyazzat/user-crud-k8s-helm/internal/db/postgres"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgerrcode"
 )
 
 type User interface {
-	AddUser(ctx context.Context, user *models.User) (string, error)
-	GetUserByID(ctx context.Context, userId string) (*models.User, error)
+	AddUser(ctx context.Context, user *models.User) (int64, error)
+	GetUserByID(ctx context.Context, userId int64) (*models.User, error)
 	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
 	UpdateUser(ctx context.Context, user *models.User) (*models.User, error)
 	DeleteUser(ctx context.Context, user *models.User) error
@@ -30,8 +29,8 @@ type userRepository struct {
 	db.DB
 }
 
-func (r *userRepository) AddUser(ctx context.Context, user *models.User) (string, error) {
-	var id string
+func (r *userRepository) AddUser(ctx context.Context, user *models.User) (int64, error) {
+	var id int64
 	err := r.DB.NewInsert().
 		Model(user).
 		Returning("id").
@@ -40,14 +39,14 @@ func (r *userRepository) AddUser(ctx context.Context, user *models.User) (string
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) && pgErr.Code == pgerrcode.UniqueViolation {
-			return "", fmt.Errorf("%w: %s", values.ErrEmailExists, pgErr.Detail)
+			return 0, fmt.Errorf("%w: %s", values.ErrEmailExists, pgErr.Detail)
 		}
-		return "", fmt.Errorf("failed to insert user: %w", err)
+		return 0, fmt.Errorf("failed to insert user: %w", err)
 	}
 	return id, nil
 }
 
-func (r *userRepository) GetUser(ctx context.Context, userId uuid.UUID) (*models.User, error) {
+func (r *userRepository) GetUser(ctx context.Context, userId int64) (*models.User, error) {
 	m := &models.User{
 		ID: userId,
 	}
@@ -58,7 +57,7 @@ func (r *userRepository) GetUser(ctx context.Context, userId uuid.UUID) (*models
 	return m, nil
 }
 
-func (r *userRepository) GetUserByID(ctx context.Context, userId string) (*models.User, error) {
+func (r *userRepository) GetUserByID(ctx context.Context, userId int64) (*models.User, error) {
 	user := new(models.User)
 
 	err := r.DB.NewSelect().

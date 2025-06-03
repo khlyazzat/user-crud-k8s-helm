@@ -55,7 +55,7 @@ func (c *userClient) GetUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid user id"})
 		return
 	}
-	res, err := c.service.GetUser(ctx, &dto.GetUserRequest{UserID: path.UserID})
+	res, err := c.service.GetUser(ctx, &dto.GetUserRequest{ID: path.ID})
 	if errors.Is(err, values.ErrUserNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": "user not found"})
 		return
@@ -73,7 +73,7 @@ func (c *userClient) DeleteUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid user id"})
 		return
 	}
-	err := c.service.DeleteUser(ctx, &dto.DeleteUserRequest{UserID: path.UserID})
+	err := c.service.DeleteUser(ctx, &dto.DeleteUserRequest{ID: path.ID})
 	if errors.Is(err, values.ErrUserNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": "user not found"})
 		return
@@ -96,7 +96,7 @@ func (c *userClient) UpdateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": "invalid request body"})
 		return
 	}
-	res, err := c.service.UpdateUser(ctx, path.UserID, &req)
+	res, err := c.service.UpdateUser(ctx, path.ID, &req)
 	if errors.Is(err, values.ErrUserNotFound) {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": "user not found"})
 		return

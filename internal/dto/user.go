@@ -2,7 +2,7 @@ package dto
 
 type (
 	UserPathRequest struct {
-		UserID string `uri:"userId" binding:"required,uuid"`
+		ID int64 `uri:"id"`
 	}
 
 	AddUserRequest struct {
@@ -12,7 +12,7 @@ type (
 	}
 
 	GetUserRequest struct {
-		UserID string
+		ID int64 `uri:"id"`
 	}
 
 	UpdateUserRequest struct {
@@ -22,24 +22,24 @@ type (
 	}
 
 	DeleteUserRequest struct {
-		UserID string
+		ID int64 `uri:"id"`
 	}
 )
 
 type (
 	AddUserResponse struct {
-		ID string `json:"id"`
+		ID int64 `json:"id"`
 	}
 
 	GetUserResponse struct {
-		ID    string `json:"id"`
+		ID    int64  `json:"id"`
 		Name  string `json:"name"`
 		Email string `json:"email"`
 		Age   int    `json:"age"`
 	}
 
 	UpdateUserResponse struct {
-		ID    string `json:"id"`
+		ID    int64  `json:"id"`
 		Name  string `json:"name"`
 		Email string `json:"email"`
 		Age   int    `json:"age"`

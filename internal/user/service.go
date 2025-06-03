@@ -17,7 +17,7 @@ type User interface {
 	AddUser(ctx context.Context, request *dto.AddUserRequest) (*dto.AddUserResponse, error)
 	GetUser(ctx context.Context, request *dto.GetUserRequest) (*dto.GetUserResponse, error)
 	DeleteUser(ctx context.Context, request *dto.DeleteUserRequest) error
-	UpdateUser(ctx context.Context, userId string, request *dto.UpdateUserRequest) (*dto.UpdateUserResponse, error)
+	UpdateUser(ctx context.Context, id int64, request *dto.UpdateUserRequest) (*dto.UpdateUserResponse, error)
 }
 
 type userService struct {
@@ -33,7 +33,7 @@ func (u *userService) AddUser(ctx context.Context, request *dto.AddUserRequest) 
 		return nil, values.ErrEmailExists
 	}
 
-	userId := ""
+	var userId int64
 	newUser := &models.User{
 		Name:  request.Name,
 		Email: request.Email,
@@ -50,12 +50,12 @@ func (u *userService) AddUser(ctx context.Context, request *dto.AddUserRequest) 
 }
 
 func (u *userService) GetUser(ctx context.Context, request *dto.GetUserRequest) (*dto.GetUserResponse, error) {
-	user, err := u.userRepo.GetUserByID(ctx, request.UserID)
+	user, err := u.userRepo.GetUserByID(ctx, request.ID)
 	if err != nil {
 		return nil, err
 	}
 	return &dto.GetUserResponse{
-		ID:    user.ID.String(),
+		ID:    user.ID,
 		Name:  user.Name,
 		Email: user.Email,
 		Age:   user.Age,
@@ -63,7 +63,7 @@ func (u *userService) GetUser(ctx context.Context, request *dto.GetUserRequest) 
 }
 
 func (u *userService) DeleteUser(ctx context.Context, request *dto.DeleteUserRequest) error {
-	user, err := u.userRepo.GetUserByID(ctx, request.UserID)
+	user, err := u.userRepo.GetUserByID(ctx, request.ID)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (u *userService) DeleteUser(ctx context.Context, request *dto.DeleteUserReq
 
 }
 
-func (u *userService) UpdateUser(ctx context.Context, userId string, request *dto.UpdateUserRequest) (*dto.UpdateUserResponse, error) {
+func (u *userService) UpdateUser(ctx context.Context, userId int64, request *dto.UpdateUserRequest) (*dto.UpdateUserResponse, error) {
 	user, err := u.userRepo.GetUserByID(ctx, userId)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func (u *userService) UpdateUser(ctx context.Context, userId string, request *dt
 		return nil, err
 	}
 	return &dto.UpdateUserResponse{
-		ID:    user.ID.String(),
+		ID:    user.ID,
 		Name:  user.Name,
 		Email: user.Email,
 		Age:   user.Age,
