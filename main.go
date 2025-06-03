@@ -12,6 +12,8 @@ import (
 
 	"github.com/khlyazzat/user-crud-k8s-helm/internal/config"
 	"github.com/khlyazzat/user-crud-k8s-helm/internal/db/postgres"
+	"github.com/khlyazzat/user-crud-k8s-helm/internal/metrics"
+	"github.com/khlyazzat/user-crud-k8s-helm/internal/middleware"
 	apiRouter "github.com/khlyazzat/user-crud-k8s-helm/internal/router"
 	"github.com/khlyazzat/user-crud-k8s-helm/internal/user"
 
@@ -19,6 +21,8 @@ import (
 )
 
 func main() {
+	metrics.Init()
+
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("env not loaded")
@@ -31,6 +35,9 @@ func main() {
 	db := postgres.New(cfg.DBConfig)
 
 	router := gin.New()
+
+	router.GET("/metrics", metrics.Handler())
+	router.Use(middleware.MetricsMiddleware)
 
 	v1 := router.Group("/v1")
 
