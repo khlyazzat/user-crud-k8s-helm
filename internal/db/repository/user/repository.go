@@ -66,7 +66,7 @@ func (r *userRepository) GetUserByID(ctx context.Context, userId int64) (*models
 		Limit(1).
 		Scan(ctx)
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, fmt.Errorf("%w: id=%s", values.ErrUserNotFound, userId)
+		return nil, fmt.Errorf("%w: id=%d", values.ErrUserNotFound, userId)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by id: %w", err)
@@ -100,7 +100,7 @@ func (r *userRepository) UpdateUser(ctx context.Context, user *models.User) (*mo
 		Scan(ctx)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, fmt.Errorf("%w: id=%s", values.ErrUserNotFound, user.ID)
+		return nil, fmt.Errorf("%w: id=%d", values.ErrUserNotFound, user.ID)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("failed to update user: %w", err)
@@ -119,7 +119,7 @@ func (r *userRepository) DeleteUser(ctx context.Context, user *models.User) erro
 	}
 	rowsAffected, _ := res.RowsAffected()
 	if rowsAffected == 0 {
-		return fmt.Errorf("%w: id=%s", values.ErrUserNotFound, user.ID)
+		return fmt.Errorf("%w: id=%d", values.ErrUserNotFound, user.ID)
 	}
 	return nil
 }
