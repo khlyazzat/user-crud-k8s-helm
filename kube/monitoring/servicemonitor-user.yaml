@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: user-service-monitor
+  namespace: default         
+  labels:
+    release: prometheus  
+spec:
+  selector:
+    matchLabels:
+      app: user-service   
+  namespaceSelector:
+    matchNames:
+      - default           
+  endpoints:
+    - port: metrics       
+      path: /metrics
+      interval: 15s
+      scheme: http        
+      honorLabels: true   
