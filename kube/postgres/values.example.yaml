@@ -2,3 +2,32 @@ auth:
   username: user_service
   password: CHANGEME
   database: userservice
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring
+    interval: 15s
+    labels:
+      release: prometheus
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+primary:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: standard
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
