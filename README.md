@@ -55,3 +55,11 @@ echo
 kubectl get pod -n ingress-nginx -l app.kubernetes.io/name=ingress-nginx
 kubectl port-forward -n ingress-nginx <ingress-pod-name> 10254
 localhost:10254/metrics
+
+### 10: PostgreSQL Monitoring via Prometheus Exporter
+pg_stat_activity_count
+pg_stat_database_numbackends
+pg_stat_database_blks_hit
+pg_stat_database_blks_read
+pg_stat_database_tup_returned
+http://localhost:9090/query
