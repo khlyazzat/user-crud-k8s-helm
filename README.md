@@ -49,3 +49,9 @@ echo
 
 kubectl get secret -n monitoring prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 -d
 echo
+
+### 9: Accessing NGINX Ingress Controller Metrics
+
+kubectl get pod -n ingress-nginx -l app.kubernetes.io/name=ingress-nginx
+kubectl port-forward -n ingress-nginx <ingress-pod-name> 10254
+localhost:10254/metrics
