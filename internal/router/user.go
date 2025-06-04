@@ -24,9 +24,9 @@ func NewUserClient(a user.User) Router {
 func (c *userClient) RegisterRouter(g *gin.RouterGroup) {
 	userGroup := g.Group("/user")
 	userGroup.POST("/create", c.CreateUser)
-	userGroup.GET("/get/:userId", c.GetUser)
-	userGroup.DELETE("/delete/:userId", c.DeleteUser)
-	userGroup.PUT("/update/:userId", c.UpdateUser)
+	userGroup.GET("/get/:id", c.GetUser)
+	userGroup.DELETE("/delete/:id", c.DeleteUser)
+	userGroup.PUT("/update/:id", c.UpdateUser)
 }
 
 func (c *userClient) RegisterAdminRouter(_ *gin.RouterGroup) {}
