@@ -56,36 +56,40 @@ echo
 
 ### 9: PostgreSQL Monitoring via Prometheus Exporter
 pg_stat_activity_count
+
 pg_stat_database_numbackends
+
 pg_stat_database_blks_hit
+
 pg_stat_database_blks_read
+
 pg_stat_database_tup_returned
+
 http://localhost:9090/query
 
 ### 10: Enable Metrics for NGINX Ingress Controller. Install the NGINX Ingress Controller via Helm
-kubectl get all -A | grep ingress-nginx   # should return nothing
-helm list -A | grep ingress               # should return nothing
-kubectl get ns | grep ingress             # should return nothing
+##### kubectl get all -A | grep ingress-nginx   # should return nothing
+##### helm list -A | grep ingress               # should return nothing
+##### kubectl get ns | grep ingress             # should return nothing
 
 if not 
 
-minikube addons disable ingress  # disable built-in ingress if used
-helm uninstall ingress-nginx -n ingress-nginx || true
-kubectl delete ns ingress-nginx --grace-period=0 --force
+##### minikube addons disable ingress  # disable built-in ingress if used
+##### helm uninstall ingress-nginx -n ingress-nginx || true
+##### kubectl delete ns ingress-nginx --grace-period=0 --force
 
 then
 
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-
-helm install ingress-nginx ingress-nginx/ingress-nginx \
-  --namespace ingress-nginx \
-  --create-namespace \
-  -f kube/values/ingress-values.yaml
+##### helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+##### helm repo update
+##### helm install ingress-nginx ingress-nginx/ingress-nginx \
+##### --namespace ingress-nginx \
+##### --create-namespace \
+##### -f kube/values/ingress-values.yaml
 
 ### 11: Accessing NGINX Ingress Controller Metrics
-kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller-metrics 10254:10254
-localhost:10254/metrics
+##### kubectl port-forward -n ingress-nginx svc/ingress-nginx-controller-metrics 10254:10254
+##### localhost:10254/metrics
 
 Minikube Note: LoadBalancer workaround
 Minikube doesn’t have a real cloud LoadBalancer like AWS or GCP.
@@ -110,3 +114,4 @@ nginx_ingress_controller_requests
 
 graph
 {__name__=~"nginx_ingress_controller_.*"}
+
