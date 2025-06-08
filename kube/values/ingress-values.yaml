@@ -1,0 +1,20 @@
+controller:
+  metrics:
+    enabled: true
+    service:
+      enabled: true
+      port: 10254
+      targetPort: 10254
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "10254"
+        prometheus.io/path: "/metrics"
+
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "10254"
+    prometheus.io/path: "/metrics"
+
+  deployment:
+    minReadySeconds: 10
+    progressDeadlineSeconds: 60
