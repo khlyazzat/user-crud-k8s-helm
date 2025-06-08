@@ -1,2 +1,4 @@
 /kube/secrets/
-/kube/postgres/values.yaml
+/kube/values/postgres-values.yaml
+/kube/values/ingress-values.yaml
+/kube/values/prometheus-values.yaml
