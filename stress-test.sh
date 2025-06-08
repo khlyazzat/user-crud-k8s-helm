@@ -32,6 +32,12 @@ while [ $SECONDS -lt $END_TIME ]; do
   done
   wait
 
+  # Удаление
+  for i in $(seq 1 $COUNT); do
+    curl -s -X DELETE "$API_URL/delete/$i" > /dev/null &
+  done
+  wait
+
   echo "✅ Раунд завершён. Пауза 10 секунд..."
   sleep 10
 done
