@@ -19,7 +19,7 @@ kubectl apply -f kube/monitoring/servicemonitor-user.yaml
 ### 3: Install PostgreSQL via Helm with custom values
 helm install users-db oci://registry-1.docker.io/bitnamicharts/postgresql -f kube/values/postgres-values.yaml
 
-### 4: Apply ConfigMaps and Secrets required by the app and migration job
+### 4: Apply ConfigMaps and Secrets required by the app
 kubectl apply -f kube/configs/
 
 kubectl apply -f kube/secrets/
@@ -120,15 +120,15 @@ kubectl get svc -n ingress-nginx ingress-nginx-controller
 This allows you to access your Ingress via domain (e.g., arch.homework) without using minikube tunnel,
 while still keeping the service type as LoadBalancer.
 
-curl -i http://...health 
+curl -i http://.../health 
 
 http://localhost:9090/query
 
-table
+in table
 
 nginx_ingress_controller_requests
 
-graph
+in graph
 
 {__name__=~"nginx_ingress_controller_.*"}
 
